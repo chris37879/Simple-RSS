@@ -10,4 +10,11 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         tools:layout="@layout/masterfragment" />
+    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="horizontal"
+        android:id="@+id/detailFragment"
+        android:layout_weight="2"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        tools:layout="@layout/detailFragment" />
 </LinearLayout>

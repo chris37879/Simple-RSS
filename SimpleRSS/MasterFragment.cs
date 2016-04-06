@@ -10,12 +10,12 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using Android.Content.Res;
 
 namespace SimpleRSS
 {
     public class MasterFragment : ListFragment
     {
-        private RSSFeed feed;
         public RSSFeed Feed {
             get { return this.feed; }
             set
@@ -28,9 +28,12 @@ namespace SimpleRSS
             }
         }
 
+        private bool IsTablet = false;
+        private RSSFeed feed;
+
         public MasterFragment() : base()
         {
-            //Empty constructor to make fragment inflater happy.
+            //Empty constructor
         }
 
         public override void OnCreate(Bundle savedInstanceState)
@@ -48,11 +51,40 @@ namespace SimpleRSS
         {
             base.OnActivityCreated(savedInstanceState);
 
+            this.IsTablet = this.Activity.FindViewById(Resource.Id.detailFragment) != null;
+
             this.ListAdapter = new FeedItemAdapter(this.Activity, this.Feed.FeedItems);
 
-            var detailLayout = this.Activity.FindViewById<View>(Resource.Id.detailLayout);
+            if (this.IsTablet)
+            {
+                this.ListView.ChoiceMode = ChoiceMode.Single;
+            }
         }
 
+        public override void OnListItemClick(ListView l, View v, int position, long id)
+        {
+            base.OnListItemClick(l, v, position, id);
+            this.ShowDetail(position);
+        }
+
+        private void ShowDetail(int position)
+        {
+            if (this.IsTablet)
+            {
+                this.ListView.SetItemChecked(position, true);
+                var detailFragment = DetailFragment.NewInstance(this.Feed.FeedItems[position].Content);
+                var fragmentTransaction = FragmentManager.BeginTransaction();
+                fragmentTransaction.Replace(Resource.Id.detailFragment, detailFragment);
+                fragmentTransaction.SetTransition(FragmentTransit.FragmentFade);
+                fragmentTransaction.Commit();
+            } else
+            {
+                var intent = new Intent();
+                intent.SetClass(Activity, typeof(DetailActivity));
+                intent.PutExtra("content", this.Feed.FeedItems[position].Content);
+                this.StartActivity(intent);
+            }
+        }
 
         private class FeedItemAdapter : BaseAdapter<FeedItem>
         {

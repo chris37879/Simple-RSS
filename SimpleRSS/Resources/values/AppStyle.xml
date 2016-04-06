@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <style name="AppTheme" parent="@android:style/Theme.Material.Light">
+
+    <item name="android:colorPrimary">@color/md_grey_300</item>
+    <item name="android:colorPrimaryDark">@color/md_teal_800</item>
+    <item name="android:colorAccent">@color/md_teal_200</item>
+
+    <item name="android:navigationBarColor">@color/md_teal_500</item>
+    <item name="android:activatedBackgroundIndicator">@color/md_teal_300</item>
+  </style>
+</resources>

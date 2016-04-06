@@ -50,6 +50,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DetailActivity.cs" />
+    <Compile Include="DetailFragment.cs" />
     <Compile Include="FeedItem.cs" />
     <Compile Include="MasterFragment.cs" />
     <Compile Include="MainActivity.cs" />
@@ -58,7 +60,6 @@
     <Compile Include="RSSFeed.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="GettingStarted.Xamarin" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
     <AndroidResource Include="Resources\layout\MasterFragment.axml">
@@ -67,6 +68,7 @@
     <AndroidResource Include="Resources\layout\DetailFragment.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout-large\Main.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\Main.axml" />
@@ -82,6 +84,12 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\Feed.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\AppStyle.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\colors.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
