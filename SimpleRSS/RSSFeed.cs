@@ -19,10 +19,7 @@ namespace SimpleRSS
     {
         public Uri URI { get; set; }
         public List<FeedItem> FeedItems { get; set; }
-
-        private static readonly XName RSSElement = XName.Get("rss");
-        private static readonly XName ItemElement = XName.Get("item");
-
+        
         public RSSFeed(string url)
         {
             this.URI = new Uri(url);
@@ -35,16 +32,17 @@ namespace SimpleRSS
 
         public async Task<List<FeedItem>> RefreshFeed()
         {
-            //TODO: Refresh the List of FeedItems
+            //TODO: Cache the feed.
             HttpClient client = new HttpClient();
 
-            Task<string> contentsTask = client.GetStringAsync(this.URI);
-            string contents = await contentsTask;
+            string contents = await client.GetStringAsync(this.URI);
 
             XDocument doc = XDocument.Parse(contents);
 
+            IEnumerable<XElement> rssItemsElems = doc.Element("rss").Element("channel").Elements("item");
+
             List<FeedItem> items = new List<FeedItem>();
-            foreach(XElement elem in doc.Element(RSSElement).Elements(ItemElement))
+            foreach(XElement elem in rssItemsElems)
             {
                 FeedItem item = new FeedItem(elem);
                 items.Add(item);

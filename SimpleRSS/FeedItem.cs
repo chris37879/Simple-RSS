@@ -23,17 +23,20 @@ namespace SimpleRSS
         public DateTime Published { get; set; }
         public string Content { get; set; }
 
-        private static readonly XName TitleElement = XName.Get("title");
-        private static readonly XName DescriptionElement = XName.Get("description");
-        private static readonly XName PublishDateElement = XName.Get("pubDate");
-        private static readonly XName ContentElement = XName.Get("content:encoded");
+        private XNamespace nsContent = "http://purl.org/rss/1.0/modules/content/";
 
         public FeedItem(XElement elem)
         {
-            this.Title = elem.Element(TitleElement).Value;
-            this.Description = elem.Element(DescriptionElement).Value;
-            this.Published = DateTime.ParseExact(elem.Element(PublishDateElement).Value, "ddd MMM dd hh:mm:ss zzz yyyy", CultureInfo.InvariantCulture);
-            this.Content = elem.Element(ContentElement).Value;
+            this.Title = elem.Element("title").Value;
+            this.Description = elem.Element("description").Value;
+            try
+            {
+                this.Published = DateTime.ParseExact(elem.Element("pubDate").Value, "ddd', 'dd MMM yyyy HH':'mm':'ss zzz", CultureInfo.InvariantCulture);
+            } catch
+            {
+                Console.WriteLine("Invalid Date Format: " + elem.Element("pubDate").Value);
+            }
+            this.Content = elem.Element(this.nsContent + "encoded").Value;
         }
     }
 }
