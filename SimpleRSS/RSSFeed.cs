@@ -12,30 +12,55 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using System.Xml.Linq;
+using Android.Net;
+using System.IO;
 
 namespace SimpleRSS
 {
     public class RSSFeed
     {
-        public Uri URI { get; set; }
+        public System.Uri URI { get; set; }
         public List<FeedItem> FeedItems { get; set; } = new List<FeedItem>();
         
         public RSSFeed(string url)
         {
-            this.URI = new Uri(url);
+            this.URI = new System.Uri(url);
         }
 
-        public RSSFeed(Uri uri)
+        public RSSFeed(System.Uri uri)
         {
             this.URI = uri;
         }
 
         public async Task<List<FeedItem>> RefreshFeed()
         {
-            //TODO: Cache the feed.
-            HttpClient client = new HttpClient();
+            ConnectivityManager connectivityManager = (ConnectivityManager)Application.Context.GetSystemService(Context.ConnectivityService);
+            NetworkInfo activeConnection = connectivityManager.ActiveNetworkInfo;
+            bool isOnline = (activeConnection != null) && activeConnection.IsConnected;
+            string contents = "";
 
-            string contents = await client.GetStringAsync(this.URI);
+            FileStream feedCacheFile = File.Open(Application.Context.CacheDir + "feed.xml", FileMode.OpenOrCreate);
+            if (isOnline)
+            {
+                HttpClient client = new HttpClient();
+                contents = await client.GetStringAsync(this.URI);
+                StreamWriter feedCacheWriter = new StreamWriter(feedCacheFile);
+                feedCacheFile.Seek(0, 0);
+                feedCacheFile.SetLength(Encoding.UTF8.GetByteCount(contents));
+                feedCacheWriter.Write(contents);
+                feedCacheWriter.Flush();
+                feedCacheWriter.Close();
+            } else
+            {
+                StreamReader feedCacheReader = new StreamReader(feedCacheFile);
+                contents = feedCacheReader.ReadToEnd();
+                if(contents.Length == 0)
+                {
+                    //TODO: There was no cached content, display an error.
+                }
+            }
+
+            feedCacheFile.Close();
 
             XDocument doc = XDocument.Parse(contents);
 
