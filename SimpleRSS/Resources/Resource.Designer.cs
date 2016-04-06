@@ -61,7 +61,10 @@ namespace SimpleRSS
 		{
 			
 			// aapt resource value: 0x7f050000
-			public const int MyButton = 2131034112;
+			public const int detailLayout = 2131034112;
+			
+			// aapt resource value: 0x7f050001
+			public const int masterFragment = 2131034113;
 			
 			static Id()
 			{
@@ -77,7 +80,13 @@ namespace SimpleRSS
 		{
 			
 			// aapt resource value: 0x7f030000
-			public const int Main = 2130903040;
+			public const int DetailFragment = 2130903040;
+			
+			// aapt resource value: 0x7f030001
+			public const int Main = 2130903041;
+			
+			// aapt resource value: 0x7f030002
+			public const int MasterFragment = 2130903042;
 			
 			static Layout()
 			{

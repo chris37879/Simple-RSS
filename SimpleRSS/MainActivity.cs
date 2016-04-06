@@ -14,23 +14,31 @@ namespace SimpleRSS
     public class MainActivity : Activity
     {
         private RSSFeed Feed;
+        private MasterFragment MasterFragment;
 
-        protected async override void OnCreate(Bundle bundle)
+        protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-
-            Console.WriteLine("OnCreate Ran.");
-
-            this.Feed = new RSSFeed("http://feeds.feedburner.com/androidcentral?format=xml");
 
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
 
-            List<FeedItem> items = await this.Feed.RefreshFeed();
-            foreach(var item in items)
-            {
-                Console.WriteLine(item.Title);
-            }
+            this.MasterFragment = this.FragmentManager.FindFragmentById<MasterFragment>(Resource.Id.masterFragment);
+
+            this.Feed = new RSSFeed("http://feeds.feedburner.com/androidcentral?format=xml");
+            this.MasterFragment.Feed = this.Feed;
+
+            this.RefreshList();
+        }
+
+        private async void RefreshList()
+        {
+            //TODO: Show Loading Indicator
+            await this.Feed.RefreshFeed();
+            this.MasterFragment.Feed = this.Feed;
+            ((BaseAdapter)this.MasterFragment.ListAdapter).NotifyDataSetChanged();
+            Console.WriteLine("Notified that dataset changed.");
+            //TODO: Dismiss Loading Indicator
         }
     }
 }

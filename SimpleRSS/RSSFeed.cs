@@ -15,10 +15,10 @@ using System.Xml.Linq;
 
 namespace SimpleRSS
 {
-    class RSSFeed
+    public class RSSFeed
     {
         public Uri URI { get; set; }
-        public List<FeedItem> FeedItems { get; set; }
+        public List<FeedItem> FeedItems { get; set; } = new List<FeedItem>();
         
         public RSSFeed(string url)
         {

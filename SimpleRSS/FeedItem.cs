@@ -15,7 +15,7 @@ using System.Globalization;
 
 namespace SimpleRSS
 {
-    class FeedItem
+    public class FeedItem
     {
 
         public string Title { get; set; }
