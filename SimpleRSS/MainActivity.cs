@@ -29,6 +29,12 @@ namespace SimpleRSS
             this.Feed = new RSSFeed("http://feeds.feedburner.com/androidcentral?format=xml");
             this.MasterFragment.Feed = this.Feed;
 
+            
+        }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
             this.RefreshList();
         }
 

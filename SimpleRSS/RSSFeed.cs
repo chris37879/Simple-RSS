@@ -39,28 +39,20 @@ namespace SimpleRSS
             bool isOnline = (activeConnection != null) && activeConnection.IsConnected;
             string contents = "";
 
-            FileStream feedCacheFile = File.Open(Application.Context.CacheDir + "feed.xml", FileMode.OpenOrCreate);
+            var filePath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "feed.xml");
             if (isOnline)
             {
                 HttpClient client = new HttpClient();
                 contents = await client.GetStringAsync(this.URI);
-                StreamWriter feedCacheWriter = new StreamWriter(feedCacheFile);
-                feedCacheFile.Seek(0, 0);
-                feedCacheFile.SetLength(Encoding.UTF8.GetByteCount(contents));
-                feedCacheWriter.Write(contents);
-                feedCacheWriter.Flush();
-                feedCacheWriter.Close();
+                File.WriteAllText(filePath, contents);
             } else
             {
-                StreamReader feedCacheReader = new StreamReader(feedCacheFile);
-                contents = feedCacheReader.ReadToEnd();
+                contents = File.ReadAllText(filePath, Encoding.UTF8);
                 if(contents.Length == 0)
                 {
                     //TODO: There was no cached content, display an error.
                 }
             }
-
-            feedCacheFile.Close();
 
             XDocument doc = XDocument.Parse(contents);
 
